@@ -45,9 +45,6 @@ public class GridAdapter extends BaseAdapter {
             convertView = inflater.inflate(mResource,parent,false);
         }
 
-        //ViewGroup.LayoutParams layoutParams = convertView.getLayoutParams();
-        //layoutParams.height = (int) (parent.getHeight() *0.166666666);
-
         TextView day =(TextView) convertView.findViewById(R.id.day);
         day.setText(mdays.get(position));
 

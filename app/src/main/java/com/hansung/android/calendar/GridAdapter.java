@@ -7,8 +7,6 @@ import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.TextView;
 
-import org.w3c.dom.Text;
-
 import java.util.ArrayList;
 
 public class GridAdapter extends BaseAdapter {
@@ -45,7 +43,10 @@ public class GridAdapter extends BaseAdapter {
             convertView = inflater.inflate(mResource,parent,false);
         }
 
-        TextView day =(TextView) convertView.findViewById(R.id.day);
+        ViewGroup.LayoutParams layoutParams = convertView.getLayoutParams();
+        layoutParams.height = (int) (parent.getHeight() *0.166666666);
+
+        TextView day =(TextView) convertView.findViewById(R.id.dayText);
         day.setText(mdays.get(position));
 
         return convertView;

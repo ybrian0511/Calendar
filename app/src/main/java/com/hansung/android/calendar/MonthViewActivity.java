@@ -15,7 +15,7 @@ import java.util.Calendar;
 
 public class MonthViewActivity extends AppCompatActivity {
 
-    private TextView yearMonthTitle;
+    private TextView month_year_text;
     private Calendar cal;
 
     @Override
@@ -23,16 +23,17 @@ public class MonthViewActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         Intent intent = getIntent();
-        yearMonthTitle = findViewById(R.id.YearMonthTitle);
+        month_year_text = findViewById(R.id.YearMonthTitle);
         if(intent.hasExtra("Date")) {
             cal = (Calendar) intent.getSerializableExtra("Date");
         }
         else cal = Calendar.getInstance(); // 현재 시간 정보
         CalendarView(); // 캘린더 뷰 함수 호출
-        buttonClick();
+        left_buttonClick(); // 이전 버튼 클릭 함수 호출
+        rigth_buttonClick(); // 다음 버튼 클릭 함수 호출
     }
 
-    public ArrayList<String> CalendarDay(Calendar date){ //
+    public ArrayList<String> daysArray(Calendar date){ //
         ArrayList <String> days_in_month = new ArrayList();
         Calendar cal = date;
         cal.set(Calendar.DATE,1); // 날짜 지정
@@ -49,14 +50,14 @@ public class MonthViewActivity extends AppCompatActivity {
         return days_in_month;
     }
 
-    private String StringDay(Calendar date){
+    private String month_year_format(Calendar date){
         SimpleDateFormat today = new SimpleDateFormat("yyyy년 MM월"); // 날짜 포맷 지정
         return today.format(date.getTime()); // 현재 날짜
     }
 
     private void CalendarView() { // 캘린더 뷰 함수
-        yearMonthTitle.setText(StringDay(cal)); // 현재 년도와 월 저장
-        ArrayList<String> days = CalendarDay(cal); // 데이터 원본 준비
+        month_year_text.setText(month_year_format(cal)); // 현재 년도와 월 저장
+        ArrayList<String> days = daysArray(cal); // 데이터 원본 준비
 
         GridAdapter adapter = new GridAdapter(this,R.layout.day, days);  // 어댑터 생성
 
@@ -74,33 +75,34 @@ public class MonthViewActivity extends AppCompatActivity {
         });
     }
 
-    private void buttonClick() { // 버튼 클릭 함수
-        Button leftButton = (Button)findViewById(R.id.left_button);
+    private void left_buttonClick() { // 이전 버튼 클릭 함수
+        Button leftButton = (Button) findViewById(R.id.left_button);
         leftButton.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onClick(View view) { // 이전버튼 클릭 시
+            public void onClick(View view) { // 버튼 클릭 시
                 int monthText = cal.get(Calendar.MONTH); // monthText는 현재 월
-                cal.set(Calendar.MONTH,monthText-1); // 현재 월에서 1이 빼진 이전 월이 된다.
-                reset(); // 초기화 함수 호출
+                cal.set(Calendar.MONTH, monthText - 1); // 현재 월에서 1이 빼진 이전 월이 된다.
+                Intent intent = new Intent(MonthViewActivity.this, MonthViewActivity.class); // 현재 액티비티에서 현재 액티비티 호출
+                intent.putExtra("Date", cal); //
+                startActivity(intent); // 인텐트 객체 전달
+                finish(); // 현재의 액티비티를 종료
             }
         });
-        Button rightButton = (Button)findViewById(R.id.right_button);
+    }
+
+    private void rigth_buttonClick() { // 다음 버튼 클릭 함수
+        Button rightButton = (Button) findViewById(R.id.right_button);
         rightButton.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onClick(View view) { // 다음버튼 클릭 시
+            public void onClick(View view) { // 버튼 클릭 시
                 int month = cal.get(Calendar.MONTH); // monthText는 현재 월
-                cal.set(Calendar.MONTH,month+1); // 현재 월에서 1이 더해진 다음 월이 된다.
-                reset(); // 초기화 함수 호출
+                cal.set(Calendar.MONTH, month + 1); // 현재 월에서 1이 더해진 다음 월이 된다.
+                Intent intent = new Intent(MonthViewActivity.this, MonthViewActivity.class); // 현재 액티비티에서 현재 액티비티 호출
+                intent.putExtra("Date", cal); //
+                startActivity(intent); // 인텐트 객체 전달
+                finish(); // 현재의 액티비티를 종료
             }
         });
     }
-
-    private void reset(){ // 초기화 함수
-        Intent intent = new Intent(MonthViewActivity.this, MonthViewActivity.class); // 현재 액티비티에서 현재 액티비티 호출
-        intent.putExtra("Date", cal); //
-        startActivity(intent); // 인텐트 객체 전달
-        finish(); // 현재의 액티비티를 종료
-    }
-
 }
 

@@ -6,7 +6,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.TextView;
-
 import java.util.ArrayList;
 
 public class GridAdapter extends BaseAdapter {
@@ -42,7 +41,7 @@ public class GridAdapter extends BaseAdapter {
             // 항목 뷰를 정의한 xml 리소스(여기서는 mResource 값)으로부터 항목 뷰 객체를 메모리로 로드
             convertView = inflater.inflate(mResource,parent,false);
         }
-
+        // 캘린더 예제 동영상에서 나온 코드인데 달력 날짜를 더 보기 좋게 만들게 하는 코드이다.
         ViewGroup.LayoutParams layoutParams = convertView.getLayoutParams();
         layoutParams.height = (int) (parent.getHeight() *0.166666666);
 

@@ -24,8 +24,8 @@ public class MonthViewActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
         Intent intent = getIntent();
         month_year_text = findViewById(R.id.YearMonthTitle);
-        if(intent.hasExtra("Date")) {
-            cal = (Calendar) intent.getSerializableExtra("Date");
+        if(intent.hasExtra("Date")) { // 키 값이 있는지 체크
+            cal = (Calendar) intent.getSerializableExtra("Date"); // 전달 받는다.
         }
         else cal = Calendar.getInstance(); // 현재 시간 정보
         CalendarView(); // 캘린더 뷰 함수 호출
@@ -36,21 +36,22 @@ public class MonthViewActivity extends AppCompatActivity {
     public ArrayList<String> daysArray(Calendar date){ //
         ArrayList <String> days_in_month = new ArrayList();
         Calendar cal = date;
-        cal.set(Calendar.DATE,1); // 날짜 지정
+        cal.set(Calendar.DATE,1); // 날짜 지정(1일)
 
-        int day_of_week = cal.get(Calendar.DAY_OF_WEEK)-1; // 현재 요일
+        int day_of_week = cal.get(Calendar.DAY_OF_WEEK)-1; // 현재 월의 1일의 요일 (일:1~토:7) -1을 한 이유는 밑에서 설명
         int num_of_day = cal.getActualMaximum(Calendar.DATE); // 현재 월의 날짜의 최대 수 (1월:31일 2월:28일..)
 
         for (int i = 1; i <= 42; i++) { // 6행 7열 >> 42개
-            if(i<= day_of_week || i> (num_of_day + day_of_week)) // i가 요일보다 작거나 i가
-                days_in_month.add(""); // 공백 추가
-            else
+            if(i<= day_of_week || i> (num_of_day + day_of_week)) // 첫째날이나 마지막날이 아닌 경우
+                days_in_month.add(""); // 공백 추가 (빈칸)
+            else // 날짜 내에 있는 경우
                 days_in_month.add(String.valueOf(i-day_of_week));
+                // 예를들어 4월의 경우 6번째가 1일,금요일(6) -1을 하지 않으면 첫째날이 1이 아닌 0이 나타나게된다.
         }
         return days_in_month;
     }
 
-    private String month_year_format(Calendar date){
+    private String month_year_format(Calendar date){ // 현재 날짜를 String으로 불러온다.
         SimpleDateFormat today = new SimpleDateFormat("yyyy년 MM월"); // 날짜 포맷 지정
         return today.format(date.getTime()); // 현재 날짜
     }
@@ -68,9 +69,9 @@ public class MonthViewActivity extends AppCompatActivity {
             public void onItemClick(AdapterView<?> parent, View vClicked, int position, long id) {
                 String date = adapter.getItem(position);
                 int Calendar_Month = cal.get(Calendar.MONTH) + 1; // +1을 하는 이유는 1월이 0이기 때문이다.
-                int Calendar_Year = cal.get(Calendar.YEAR);
+                int Calendar_Year = cal.get(Calendar.YEAR); // 년도는 그대로(+-필요x)
                 Toast.makeText(MonthViewActivity.this, Calendar_Year+"."+Calendar_Month+"."+date ,
-                        Toast.LENGTH_SHORT).show(); // 날짜 클릭 시 년.월.일 메시지 출력
+                        Toast.LENGTH_SHORT).show(); // 날짜 클릭 시 년.월.일 토스트 메시지 출력
             }
         });
     }
